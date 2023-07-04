@@ -43,9 +43,20 @@ function backMenu() {
     document.querySelector("#gameEnd").style.display = "none";
 }
 
-function update() {
-    
-}
+//ballsyoukan
+const ball = new CanvasComponents({
+  ctx: MainContext,
+  img: "aikonfinal.png",
+  position: new Vector2(GameArea.x / 3, GameArea.y / 2),
+  update: function () {
+    //every flame
+    if(IsGameRunning == true){
+    this.motion = this.direction.normalized().multiply(15);
+    this.position = this.position.add(this.motion);
+    }
+  }
+});
+ball.direction = new Vector2(0.6,0.8);
 
 //ゲームループの定義・開始
 const GameLoop = new GameLoopManager(() => {
@@ -54,6 +65,5 @@ const GameLoop = new GameLoopManager(() => {
         component.update();
         component.render();
     });
-    update();
 }, 30);
 GameLoop.start();
