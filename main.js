@@ -7,7 +7,21 @@ const Sound = new SoundManager();
 GameArea.refresh();
 
 let IsGameRunning = false;
-
+//バーだよぉ
+const bar = new CanvasComponents({
+    ctx: MainContext,
+    img: "demo-breakout/assets/bar.png",
+    size: new Vector2(134,17),
+    position: new Vector2(GameArea.x / 2, GameArea.y - 100),
+    update : function () {
+        if (keyInput.IsPressed("ArrowLeft") & this.position.x > 0 + this.size.x / 2) {
+             this.position.x -=20 
+        }     
+       if (keyInput.IsPressed("ArrowRight") & this.position.x < 1280 - this.size.x / 2) {
+        this.position.x +=20
+        }
+    }
+})
 Sound.LoadSound("click", "assets/click.mp3");
 Sound.LoadSound("hit", "assets/hit.mp3");
 function gameStart() {
