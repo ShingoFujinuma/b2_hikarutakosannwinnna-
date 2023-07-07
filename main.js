@@ -28,12 +28,18 @@ function gameStart() {
     Sound.PlaySound("click");
     document.querySelector("#menu").style.display = "none";
     document.querySelector("#game").style.display = "block";
+    ball.position.x = GameArea.x/3;
+    ball.position.y = GameArea.y/2;
+    ball.direction.x = 0.6;
+    ball.direction.y = 0.8;
+    bar.position.x = GameArea.x/2;
     IsGameRunning = true;
 }
 
 function gameOver() {
     document.querySelector("#gameEnd").style.display = "block";
     IsGameRunning = false;
+    Sound.PlaySound("hit");
 }
 
 function backMenu() {
@@ -50,9 +56,27 @@ const ball = new CanvasComponents({
   position: new Vector2(GameArea.x / 3, GameArea.y / 2),
   update: function () {
     //every flame
+    this.rotate += 501
     if(IsGameRunning == true){
     this.motion = this.direction.normalized().multiply(15);
     this.position = this.position.add(this.motion);
+    if(this.position.x > GameArea.x - this.size.x/2)
+    {this.direction.x = this.direction.x - this.direction.x * 2
+    Sound.PlaySound("click")}
+    if(this.position.x < 0+this.size.x/2)
+    {this.direction.x = this.direction.x - this.direction.x * 2
+        Sound.PlaySound("click")}
+    if(this.position.y < 0+this.size.y/2)
+    {this.direction.y = this.direction.y - this.direction.y * 2
+        Sound.PlaySound("click")}
+    if(this.position.y > bar.position.y - bar.size.y/2 - this.size.y/2 &&
+       this.position.y < bar.position.y + bar.size.y/2 + this.size.y/2 &&
+       this.position.x > bar.position.x - bar.size.x/2 - this.size.x/2 &&
+       this.position.x < bar.position.x + bar.size.x/2 + this.size.x/2)
+    {this.direction.y = this.direction.y - this.direction.y * 2
+        Sound.PlaySound("click")}
+    if(this.position.y > GameArea.y)
+    {gameOver();}
     }
   }
 });
