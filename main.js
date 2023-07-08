@@ -39,7 +39,7 @@ function gameStart() {
 function gameOver() {
     document.querySelector("#gameEnd").style.display = "block";
     IsGameRunning = false;
-    Sound.PlaySound("hit");
+    Sound.PlaySound("explosion");
 }
 
 function backMenu() {
