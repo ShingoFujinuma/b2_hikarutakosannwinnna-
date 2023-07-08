@@ -24,15 +24,11 @@ const bar = new CanvasComponents({
 })
 Sound.LoadSound("click", "assets/click.mp3");
 Sound.LoadSound("hit", "assets/hit.mp3");
+Sound.LoadSound("explosion","explosion.mp3")
 function gameStart() {
     Sound.PlaySound("click");
     document.querySelector("#menu").style.display = "none";
     document.querySelector("#game").style.display = "block";
-    ball.position.x = GameArea.x/3;
-    ball.position.y = GameArea.y/2;
-    ball.direction.x = 0.6;
-    ball.direction.y = 0.8;
-    bar.position.x = GameArea.x/2;
     IsGameRunning = true;
 }
 
@@ -47,6 +43,11 @@ function backMenu() {
     document.querySelector("#menu").style.display = "block";
     document.querySelector("#game").style.display = "none";
     document.querySelector("#gameEnd").style.display = "none";
+    ball.position.x = GameArea.x/3;
+    ball.position.y = GameArea.y/2;
+    ball.direction.x = 0.6;
+    ball.direction.y = 0.8;
+    bar.position.x = GameArea.x/2;
 }
 
 //ballsyoukan
