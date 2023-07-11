@@ -35,7 +35,7 @@ for (let i = 0; i < board.length; i++) {
         if (board[i][j] === "▪") {
             new CanvasComponents({
                 ctx: MainContext,
-                img: "kasu.jpg",
+                img: "aho.jpg",
                 size: new Vector2(GameArea.x / 10, 30),
                 position: new Vector2((GameArea.x / 10 / 2) + j * (GameArea.x / 10), 15 + i * 30),
                 update: function () {
