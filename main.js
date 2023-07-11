@@ -22,9 +22,12 @@ const bar = new CanvasComponents({
         }
     }
 })
+//soundloading
 Sound.LoadSound("click", "assets/click.mp3");
 Sound.LoadSound("hit", "assets/hit.mp3");
 Sound.LoadSound("explosion","explosion.mp3")
+Sound.LoadSound("death","キャンセル5.mp3")
+
 function gameStart() {
     Sound.PlaySound("click");
     document.querySelector("#menu").style.display = "none";
@@ -53,7 +56,7 @@ function backMenu() {
 //ballsyoukan
 const ball = new CanvasComponents({
   ctx: MainContext,
-  img: "aikonfinal.png",
+  img: "ball2.png",
   position: new Vector2(GameArea.x / 3, GameArea.y / 2),
   update: function () {
     //every flame
