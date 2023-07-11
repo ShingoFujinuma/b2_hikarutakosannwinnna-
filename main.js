@@ -15,10 +15,10 @@ const bar = new CanvasComponents({
     position: new Vector2(GameArea.x / 2, GameArea.y - 100),
     update : function () {
         if (keyInput.IsPressed("ArrowLeft") & this.position.x > 0 + this.size.x / 2) {
-             this.position.x -=20 
+             this.position.x -=15
         }     
        if (keyInput.IsPressed("ArrowRight") & this.position.x < 1280 - this.size.x / 2) {
-        this.position.x +=20
+        this.position.x +=15
         }
     }
 })
@@ -73,12 +73,22 @@ const ball = new CanvasComponents({
     if(this.position.y < 0+this.size.y/2)
     {this.direction.y = this.direction.y - this.direction.y * 2
         Sound.PlaySound("click")}
-    if(this.position.y > bar.position.y - bar.size.y/2 - this.size.y/2 &&
-       this.position.y < bar.position.y + bar.size.y/2 + this.size.y/2 &&
-       this.position.x > bar.position.x - bar.size.x/2 - this.size.x/2 &&
-       this.position.x < bar.position.x + bar.size.x/2 + this.size.x/2)
-    {this.direction.y = this.direction.y - this.direction.y * 2
-        Sound.PlaySound("click")}
+    if (
+        this.position.x > bar.position.x - bar.size.x / 2 &&
+        this.position.x < bar.position.x + bar.size.x / 2 &&
+        this.position.y > bar.position.y - bar.size.y / 2 - this.size.y / 2 + 25 &&
+        this.position.y < bar.position.y + bar.size.y / 2 + this.size.y / 2 - 25
+    ) {
+        this.direction.y *= -1;
+    } 
+    else if (
+        this.position.x > bar.position.x - bar.size.x / 2 - this.size.x / 2 - 25 &&
+        this.position.x < bar.position.x + bar.size.x / 2 + this.size.x / 2 + 25 &&
+        this.position.y > bar.position.y - bar.size.y / 2 &&
+        this.position.y < bar.position.y + bar.size.y / 2
+    ) {
+        this.direction.x *= -1;
+    }
     if(this.position.y > GameArea.y)
     {gameOver();}
     }
