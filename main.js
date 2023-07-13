@@ -31,57 +31,6 @@ const bar = new CanvasComponents({
     }
 })
 
-const board = [
-    "          ",
-    "          ",
-    " ▪▪▪▪▪▪▪▪ ",
-    " ▪▪▪▪▪▪▪▪ ",
-    " ▪▪▪▪▪▪▪▪ "
-];
-for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board[i].length; j++) {
-        if (board[i][j] === "▪") {
-            new CanvasComponents({
-                ctx: MainContext,
-                img: "aho.jpg",
-                size: new Vector2(GameArea.x / 10, 30),
-                position: new Vector2((GameArea.x / 10 / 2) + j * (GameArea.x / 10), 15 + i * 30),
-                update: function () {
-                    if (
-                        (
-
-                            ball.position.x > this.position.x - this.size.x / 2 - ball.size.x / 2 &&
-                            ball.position.x < this.position.x + this.size.x / 2 + ball.size.x / 2 &&
-                            ball.position.y > this.position.y - this.size.y / 2 &&
-                            ball.position.y < this.position.y + this.size.y / 2
-                        ) || (
-
-                            ball.position.x > this.position.x - this.size.x / 2 &&
-                            ball.position.x < this.position.x + this.size.x / 2 &&
-                            ball.position.y > this.position.y - this.size.y / 2 - ball.size.y / 2 &&
-                            ball.position.y < this.position.y + this.size.y / 2 + ball.size.y / 2
-                        )
-                    ) {
-                        Sound.PlaySound("hit");
-                        score += 1;
-                        if (hs < score) {
-                            hs = score;
-                        }
-                        if (score == 4) {
-                            gameClear();
-                        }
-                        board[i] = board[i].slice(0, j) + " " + board[i].slice(j + 1);
-                        if (ball.position.x > this.position.x - this.size.x / 2 && ball.position.x < this.position.x + this.size.x / 2)
-                            ball.direction.y *= -1;
-                        else ball.direction.x *= -1;
-
-                        this.position = new Vector2(-100, -100);
-                    }
-                },
-            });
-        }
-    }
-}
 
 //soundloading
 Sound.LoadSound("click", "assets/click.mp3");
@@ -107,16 +56,23 @@ function gameOver() {
     receiver = true;
     document.querySelector("#gameEnd").style.display = "block";
     IsGameRunning = false;
-    Sound.PlaySound("explosion");
+    Sound.PlaySound("click");
 }
 
 function backMenu() {
-    Sound.PlaySound("click");
+    Sound.PlaySound("explosion");
     document.querySelector("#menu").style.display = "block";
     document.querySelector("#game").style.display = "none";
     document.querySelector("#gameEnd").style.display = "none";
     receiver = false;
     donts = false;
+    board = [
+        "          ",
+        "          ",
+        "          ",
+        "          ",
+        "          "
+    ];
 }
 
 function gameClear() {
@@ -188,10 +144,61 @@ const GameLoop = new GameLoopManager(() => {
             bar.position.x = GameArea.x / 2;
             IsGameRunning = true;
             donts = true;
+            board = [
+                "          ",
+                "          ",
+                " ▪▪▪▪▪▪▪▪ ",
+                " ▪▪▪▪▪▪▪▪ ",
+                " ▪▪▪▪▪▪▪▪ "
+            ];
+            for (let i = 0; i < board.length; i++) {
+                for (let j = 0; j < board[i].length; j++) {
+                    if (board[i][j] === "▪") {
+                        new CanvasComponents({
+                            ctx: MainContext,
+                            img: "aho.jpg",
+                            size: new Vector2(GameArea.x / 10, 30),
+                            position: new Vector2((GameArea.x / 10 / 2) + j * (GameArea.x / 10), 15 + i * 30),
+                            update: function () {
+                                if (
+                                    (
+            
+                                        ball.position.x > this.position.x - this.size.x / 2 - ball.size.x / 2 &&
+                                        ball.position.x < this.position.x + this.size.x / 2 + ball.size.x / 2 &&
+                                        ball.position.y > this.position.y - this.size.y / 2 &&
+                                        ball.position.y < this.position.y + this.size.y / 2
+                                    ) || (
+            
+                                        ball.position.x > this.position.x - this.size.x / 2 &&
+                                        ball.position.x < this.position.x + this.size.x / 2 &&
+                                        ball.position.y > this.position.y - this.size.y / 2 - ball.size.y / 2 &&
+                                        ball.position.y < this.position.y + this.size.y / 2 + ball.size.y / 2
+                                    )
+                                ) {
+                                    Sound.PlaySound("hit");
+                                    score += 1;
+                                    if (hs < score) {
+                                        hs = score;
+                                    }
+                                    if (score == 24) {
+                                        gameClear();
+                                    }
+                                    board[i] = board[i].slice(0, j) + " " + board[i].slice(j + 1);
+                                    if (ball.position.x > this.position.x - this.size.x / 2 && ball.position.x < this.position.x + this.size.x / 2)
+                                        ball.direction.y *= -1;
+                                    else ball.direction.x *= -1;
+            
+                                    this.position = new Vector2(-100, -100);
+                                }
+                            },
+                        });
+                    }
+                }
+            }
         }
         if(keyInput.IsPressed("r") && IsGameRunning == false && receiver == true){
             backMenu()
         }
     });
 }, 30);
-GameLoop.start();
+GameLoop.start()
