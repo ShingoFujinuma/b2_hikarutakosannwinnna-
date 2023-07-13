@@ -6,7 +6,12 @@ const keyInput = new keyInputManager();
 const Sound = new SoundManager();
 GameArea.refresh();
 
+let score = 0;
+let hs = 0;
+let dis = document.getElementById("menu");
+dis.innerHTML = "BREAK OUT<br><br>HIGH SCORE: "+hs+"<br><br>PRESS S TO START";
 let IsGameRunning = false;
+
 //バーだよぉ
 const bar = new CanvasComponents({
     ctx: MainContext,
@@ -55,6 +60,13 @@ for (let i = 0; i < board.length; i++) {
                         )
                     ) {
                         Sound.PlaySound("hit");
+                        score += 1;
+                        if (hs < score) {
+                            hs = score;
+                        }
+                        if (score == 4) {
+                            gameClear();
+                        }
                         board[i] = board[i].slice(0, j) + " " + board[i].slice(j + 1);
                         if (ball.position.x > this.position.x - this.size.x / 2 && ball.position.x < this.position.x + this.size.x / 2)
                             ball.direction.y *= -1;
@@ -78,10 +90,16 @@ function gameStart() {
     Sound.PlaySound("click");
     document.querySelector("#menu").style.display = "none";
     document.querySelector("#game").style.display = "block";
+    ball.position.x = GameArea.x / 3;
+    ball.position.y = GameArea.y / 2;
+    ball.direction.x = 0.6;
+    ball.direction.y = 0.8;
+    bar.position.x = GameArea.x / 2;
     IsGameRunning = true;
 }
 
 function gameOver() {
+   // let gamedeath = document.getElementById("gameEnd");
     document.querySelector("#gameEnd").style.display = "block";
     IsGameRunning = false;
     Sound.PlaySound("explosion");
@@ -92,11 +110,14 @@ function backMenu() {
     document.querySelector("#menu").style.display = "block";
     document.querySelector("#game").style.display = "none";
     document.querySelector("#gameEnd").style.display = "none";
-    ball.position.x = GameArea.x / 3;
-    ball.position.y = GameArea.y / 2;
-    ball.direction.x = 0.6;
-    ball.direction.y = 0.8;
-    bar.position.x = GameArea.x / 2;
+}
+
+function gameClear() {
+    Sound.PlaySound("death");
+    IsGameRunning = false;
+    let gameend = document.getElementById("gameEnd");
+    document.querySelector("#gameEnd").style.display = "block";
+    gameend.textContent = "CLEAR";
 }
 
 //ballsyoukan
@@ -126,6 +147,7 @@ const ball = new CanvasComponents({
         this.position.y < bar.position.y + bar.size.y / 2 + this.size.y / 2 - 25
     ) {
         this.direction.y *= -1;
+        Sound.PlaySound("click");
     } 
     else if (
         this.position.x > bar.position.x - bar.size.x / 2 - this.size.x / 2 - 25 &&
@@ -134,11 +156,12 @@ const ball = new CanvasComponents({
         this.position.y < bar.position.y + bar.size.y / 2
     ) {
         this.direction.x *= -1;
+        Sound.PlaySound("click");
     }
     if(this.position.y > GameArea.y)
     {gameOver();}
     }
-});
+}});
 ball.direction = new Vector2(0.6, 0.8);
 
 //ゲームループの定義・開始
@@ -147,6 +170,27 @@ const GameLoop = new GameLoopManager(() => {
     CanvasComponents.components.forEach((component) => {
         component.update();
         component.render();
+        if(keyInput.IsPressed("s") && IsGameRunning == false){
+            Sound.PlaySound("click");
+            document.querySelector("#menu").style.display = "none";
+            document.querySelector("#game").style.display = "block";
+            ball.position.x = GameArea.x / 3;
+            ball.position.y = GameArea.y / 2;
+            ball.direction.x = 0.6;
+            ball.direction.y = 0.8;
+            bar.position.x = GameArea.x / 2;
+            IsGameRunning = true;
+        } else if(keyInput.IsPressed("r") && IsGameRunning == false){
+            Sound.PlaySound("click");
+            document.querySelector("#menu").style.display = "none";
+            document.querySelector("#game").style.display = "block";
+            ball.position.x = GameArea.x / 3;
+            ball.position.y = GameArea.y / 2;
+            ball.direction.x = 0.6;
+            ball.direction.y = 0.8;
+            bar.position.x = GameArea.x / 2;
+            IsGameRunning = true;
+        }
     });
 }, 30);
 GameLoop.start();
