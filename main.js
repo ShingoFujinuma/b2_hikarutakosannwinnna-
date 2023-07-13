@@ -11,6 +11,9 @@ let hs = 0;
 let dis = document.getElementById("menu");
 dis.innerHTML = "BREAK OUT<br><br>HIGH SCORE: "+hs+"<br><br>PRESS S TO START";
 let IsGameRunning = false;
+let donts = false;
+let receiver = false;
+let gamedeath = document.getElementById("gameEnd");
 
 //バーだよぉ
 const bar = new CanvasComponents({
@@ -19,10 +22,10 @@ const bar = new CanvasComponents({
     size: new Vector2(134, 17),
     position: new Vector2(GameArea.x / 2, GameArea.y - 100),
     update: function () {
-        if (keyInput.IsPressed("ArrowLeft") & this.position.x > 0 + this.size.x / 2) {
+        if (keyInput.IsPressed("ArrowLeft") && this.position.x > 0 + this.size.x / 2 && IsGameRunning == true) {
              this.position.x -=15
         }     
-       if (keyInput.IsPressed("ArrowRight") & this.position.x < 1280 - this.size.x / 2) {
+       if (keyInput.IsPressed("ArrowRight") && this.position.x < 1280 - this.size.x / 2 && IsGameRunning == true) {
         this.position.x +=15
         }
     }
@@ -99,7 +102,9 @@ function gameStart() {
 }
 
 function gameOver() {
-   // let gamedeath = document.getElementById("gameEnd");
+    gamedeath.innerHTML = "GAME OVER<br><br>SCORE: "+score+"<br>HIGHSCORE: "+hs+"<br><br>PRESS R TO RESTART";
+    donts = true;
+    receiver = true;
     document.querySelector("#gameEnd").style.display = "block";
     IsGameRunning = false;
     Sound.PlaySound("explosion");
@@ -110,14 +115,16 @@ function backMenu() {
     document.querySelector("#menu").style.display = "block";
     document.querySelector("#game").style.display = "none";
     document.querySelector("#gameEnd").style.display = "none";
+    receiver = false;
+    donts = false;
 }
 
 function gameClear() {
     Sound.PlaySound("death");
     IsGameRunning = false;
-    let gameend = document.getElementById("gameEnd");
+    donts = true;
     document.querySelector("#gameEnd").style.display = "block";
-    gameend.textContent = "CLEAR";
+    gamedeath.textContent = "CLEAR";
 }
 
 //ballsyoukan
@@ -170,7 +177,7 @@ const GameLoop = new GameLoopManager(() => {
     CanvasComponents.components.forEach((component) => {
         component.update();
         component.render();
-        if(keyInput.IsPressed("s") && IsGameRunning == false){
+        if(keyInput.IsPressed("s") && IsGameRunning == false && donts == false){
             Sound.PlaySound("click");
             document.querySelector("#menu").style.display = "none";
             document.querySelector("#game").style.display = "block";
@@ -180,16 +187,10 @@ const GameLoop = new GameLoopManager(() => {
             ball.direction.y = 0.8;
             bar.position.x = GameArea.x / 2;
             IsGameRunning = true;
-        } else if(keyInput.IsPressed("r") && IsGameRunning == false){
-            Sound.PlaySound("click");
-            document.querySelector("#menu").style.display = "none";
-            document.querySelector("#game").style.display = "block";
-            ball.position.x = GameArea.x / 3;
-            ball.position.y = GameArea.y / 2;
-            ball.direction.x = 0.6;
-            ball.direction.y = 0.8;
-            bar.position.x = GameArea.x / 2;
-            IsGameRunning = true;
+            donts = true;
+        }
+        if(keyInput.IsPressed("r") && IsGameRunning == false && receiver == true){
+            backMenu()
         }
     });
 }, 30);
