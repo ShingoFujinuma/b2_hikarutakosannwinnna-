@@ -14,6 +14,7 @@ let IsGameRunning = false;
 let donts = false;
 let receiver = false;
 let gamedeath = document.getElementById("gameEnd");
+let block=[];
 
 //バーだよぉ
 const bar = new CanvasComponents({
@@ -59,44 +60,42 @@ function gameStart() {
         for (let i = 0; i < board.length; i++) {
             for (let j = 0; j < board[i].length; j++) {
                 if (board[i][j] === "▪") {
-                    new CanvasComponents({
+                    block.push ( new CanvasComponents({
                         ctx: MainContext,
                         img: "aho.jpg",
                         size: new Vector2(GameArea.x / 10, 30),
-                        position: new Vector2((GameArea.x / 10 / 2) + j * (GameArea.x / 10), 15 + i * 30),
+                        position: new Vector2((GameArea.x / 10 / 2) + j * (GameArea.x / 10) , 15 + i * 30),
                         update: function () {
                             if (
                                 (
-        
                                     ball.position.x > this.position.x - this.size.x / 2 - ball.size.x / 2 &&
                                     ball.position.x < this.position.x + this.size.x / 2 + ball.size.x / 2 &&
                                     ball.position.y > this.position.y - this.size.y / 2 &&
                                     ball.position.y < this.position.y + this.size.y / 2
                                 ) || (
-        
                                     ball.position.x > this.position.x - this.size.x / 2 &&
                                     ball.position.x < this.position.x + this.size.x / 2 &&
                                     ball.position.y > this.position.y - this.size.y / 2 - ball.size.y / 2 &&
                                     ball.position.y < this.position.y + this.size.y / 2 + ball.size.y / 2
                                 )
                             ) {
-                                Sound.PlaySound("death");
-                                score += 1;
-                                if (hs < score) {
-                                    hs = score;
-                                }
-                                if (score == 24) {
-                                    gameClear();
-                                }
-                                board[i] = board[i].slice(0, j) + " " + board[i].slice(j + 1);
-                                if (ball.position.x > this.position.x - this.size.x / 2 && ball.position.x < this.position.x + this.size.x / 2)
-                                    ball.direction.y *= -1;
-                                else ball.direction.x *= -1;
-        
-                                this.position = new Vector2(-100, -100);
+                            Sound.PlaySound("death");
+                            score += 1;
+                            if (hs < score) {
+                                hs = score;
+                            }
+                            if (score == 24) {
+                                gameClear();
+                            }
+                            board[i] = board[i].slice(0, j) + " " + board[i].slice(j + 1);
+                            if (ball.position.x > this.position.x - this.size.x / 2 && ball.position.x < this.position.x + this.size.x / 2)
+                                ball.direction.y *= -1;
+                            else ball.direction.x *= -1;
+    
+                            this.position = new Vector2(-100, -100);
                             }
                         },
-                    });
+                    }));
                 }
             }
         }
@@ -119,13 +118,7 @@ function backMenu() {
     document.querySelector("#gameEnd").style.display = "none";
     receiver = false;
     donts = false;
-    board = [
-        "          ",
-        "          ",
-        "          ",
-        "          ",
-        "          "
-    ];
+    killblock();
 }
 
 function gameClear() {
@@ -134,6 +127,12 @@ function gameClear() {
     donts = true;
     document.querySelector("#gameEnd").style.display = "block";
     gamedeath.textContent = "CLEAR";
+}
+
+function killblock() {
+    for(let k = 0;k<block.length;k++){
+        block[k].position.x = 99999999;
+    }
 }
 
 //ballsyoukan
@@ -187,16 +186,7 @@ const GameLoop = new GameLoopManager(() => {
         component.update();
         component.render();
         if(keyInput.IsPressed("s") && IsGameRunning == false && donts == false){
-            Sound.PlaySound("click");
-            document.querySelector("#menu").style.display = "none";
-            document.querySelector("#game").style.display = "block";
-            ball.position.x = GameArea.x / 3;
-            ball.position.y = GameArea.y / 2;
-            ball.direction.x = 0.6;
-            ball.direction.y = 0.8;
-            bar.position.x = GameArea.x / 2;
-            IsGameRunning = true;
-            donts = true;
+            gameStart()
         }
         if(keyInput.IsPressed("r") && IsGameRunning == false && receiver == true){
             backMenu()
