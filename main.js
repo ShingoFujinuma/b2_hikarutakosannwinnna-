@@ -37,6 +37,7 @@ Sound.LoadSound("click", "assets/click.mp3");
 Sound.LoadSound("hit", "assets/hit.mp3");
 Sound.LoadSound("explosion", "explosion.mp3")
 Sound.LoadSound("death", "キャンセル5.mp3")
+Sound.LoadSound("clear", "決定ボタンを押す20.mp3")
 
 function gameStart() {
     Sound.PlaySound("click");
@@ -56,11 +57,11 @@ function gameOver() {
     receiver = true;
     document.querySelector("#gameEnd").style.display = "block";
     IsGameRunning = false;
-    Sound.PlaySound("click");
+    Sound.PlaySound("explosion");
 }
 
 function backMenu() {
-    Sound.PlaySound("explosion");
+    Sound.PlaySound("click");
     document.querySelector("#menu").style.display = "block";
     document.querySelector("#game").style.display = "none";
     document.querySelector("#gameEnd").style.display = "none";
@@ -76,7 +77,7 @@ function backMenu() {
 }
 
 function gameClear() {
-    Sound.PlaySound("death");
+    Sound.PlaySound("clear");
     IsGameRunning = false;
     donts = true;
     document.querySelector("#gameEnd").style.display = "block";
@@ -175,7 +176,7 @@ const GameLoop = new GameLoopManager(() => {
                                         ball.position.y < this.position.y + this.size.y / 2 + ball.size.y / 2
                                     )
                                 ) {
-                                    Sound.PlaySound("hit");
+                                    Sound.PlaySound("death");
                                     score += 1;
                                     if (hs < score) {
                                         hs = score;
