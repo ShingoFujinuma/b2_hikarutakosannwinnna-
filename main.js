@@ -15,6 +15,7 @@ let donts = false;
 let receiver = false;
 let gamedeath = document.getElementById("gameEnd");
 let block=[];
+let randomiser = Math.random();
 
 //バーだよぉ
 const bar = new CanvasComponents({
@@ -52,7 +53,6 @@ function gameStart() {
     IsGameRunning = true;
         const board = [
             "          ",
-            "          ",
             " ▪▪▪▪▪▪▪▪ ",
             " ▪▪▪▪▪▪▪▪ ",
             " ▪▪▪▪▪▪▪▪ "
@@ -60,11 +60,13 @@ function gameStart() {
         for (let i = 0; i < board.length; i++) {
             for (let j = 0; j < board[i].length; j++) {
                 if (board[i][j] === "▪") {
+                    randomiser = Math.random();
+                    if (randomiser<0.25){
                     block.push ( new CanvasComponents({
                         ctx: MainContext,
                         img: "aho.jpg",
-                        size: new Vector2(GameArea.x / 10, 30),
-                        position: new Vector2((GameArea.x / 10 / 2) + j * (GameArea.x / 10) , 15 + i * 30),
+                        size: new Vector2(GameArea.x / 10, 70),
+                        position: new Vector2((GameArea.x / 10 / 2) + j * (GameArea.x / 10) , 15 + i * 70),
                         update: function () {
                             if (
                                 (
@@ -89,14 +91,132 @@ function gameStart() {
                             }
                             board[i] = board[i].slice(0, j) + " " + board[i].slice(j + 1);
                             if (ball.position.x > this.position.x - this.size.x / 2 && ball.position.x < this.position.x + this.size.x / 2)
-                                ball.direction.y *= -1;
-                            else ball.direction.x *= -1;
+                                {ball.direction.y *= -1;
+                                ball.direction.x += Math.random();}
+                            else {ball.direction.x *= -1;
+                                ball.direction.y += Math.random();}
     
                             this.position = new Vector2(-100, -100);
                             }
                         },
                     }));
-                }
+                }else if (0.25 <= randomiser && randomiser <0.5){
+                    block.push ( new CanvasComponents({
+                        ctx: MainContext,
+                        img: "shingo.png",
+                        size: new Vector2(GameArea.x / 10, 70),
+                        position: new Vector2((GameArea.x / 10 / 2) + j * (GameArea.x / 10) , 15 + i * 70),
+                        update: function () {
+                            if (
+                                (
+                                    ball.position.x > this.position.x - this.size.x / 2 - ball.size.x / 2 &&
+                                    ball.position.x < this.position.x + this.size.x / 2 + ball.size.x / 2 &&
+                                    ball.position.y > this.position.y - this.size.y / 2 &&
+                                    ball.position.y < this.position.y + this.size.y / 2
+                                ) || (
+                                    ball.position.x > this.position.x - this.size.x / 2 &&
+                                    ball.position.x < this.position.x + this.size.x / 2 &&
+                                    ball.position.y > this.position.y - this.size.y / 2 - ball.size.y / 2 &&
+                                    ball.position.y < this.position.y + this.size.y / 2 + ball.size.y / 2
+                                )
+                            ) {
+                            Sound.PlaySound("death");
+                            score += 1;
+                            if (hs < score) {
+                                hs = score;
+                            }
+                            if (score == 24) {
+                                gameClear();
+                            }
+                            board[i] = board[i].slice(0, j) + " " + board[i].slice(j + 1);
+                            if (ball.position.x > this.position.x - this.size.x / 2 && ball.position.x < this.position.x + this.size.x / 2)
+                                {ball.direction.y *= -1;
+                                ball.direction.x += Math.random();}
+                            else {ball.direction.x *= -1;
+                                ball.direction.y += Math.random();}
+    
+                            this.position = new Vector2(-100, -100);
+                            }
+                        },
+                    }));
+                }else if(0.5<=randomiser&&randomiser<0.75){
+                    block.push ( new CanvasComponents({
+                        ctx: MainContext,
+                        img: "yuutos2.jpg",
+                        size: new Vector2(GameArea.x / 10, 70),
+                        position: new Vector2((GameArea.x / 10 / 2) + j * (GameArea.x / 10) , 15 + i * 70),
+                        update: function () {
+                            if (
+                                (
+                                    ball.position.x > this.position.x - this.size.x / 2 - ball.size.x / 2 &&
+                                    ball.position.x < this.position.x + this.size.x / 2 + ball.size.x / 2 &&
+                                    ball.position.y > this.position.y - this.size.y / 2 &&
+                                    ball.position.y < this.position.y + this.size.y / 2
+                                ) || (
+                                    ball.position.x > this.position.x - this.size.x / 2 &&
+                                    ball.position.x < this.position.x + this.size.x / 2 &&
+                                    ball.position.y > this.position.y - this.size.y / 2 - ball.size.y / 2 &&
+                                    ball.position.y < this.position.y + this.size.y / 2 + ball.size.y / 2
+                                )
+                            ) {
+                            Sound.PlaySound("death");
+                            score += 1;
+                            if (hs < score) {
+                                hs = score;
+                            }
+                            if (score == 24) {
+                                gameClear();
+                            }
+                            board[i] = board[i].slice(0, j) + " " + board[i].slice(j + 1);
+                            if (ball.position.x > this.position.x - this.size.x / 2 && ball.position.x < this.position.x + this.size.x / 2)
+                                {ball.direction.y *= -1;
+                                ball.direction.x += Math.random();}
+                            else {ball.direction.x *= -1;
+                                ball.direction.y += Math.random();}
+    
+                            this.position = new Vector2(-100, -100);
+                            }
+                        },
+                    }));
+                }else block.push ( new CanvasComponents({
+                    ctx: MainContext,
+                    img: "tanakas.webp",
+                    size: new Vector2(GameArea.x / 10, 70),
+                    position: new Vector2((GameArea.x / 10 / 2) + j * (GameArea.x / 10) , 15 + i * 70),
+                    update: function () {
+                        if (
+                            (
+                                ball.position.x > this.position.x - this.size.x / 2 - ball.size.x / 2 &&
+                                ball.position.x < this.position.x + this.size.x / 2 + ball.size.x / 2 &&
+                                ball.position.y > this.position.y - this.size.y / 2 &&
+                                ball.position.y < this.position.y + this.size.y / 2
+                            ) || (
+                                ball.position.x > this.position.x - this.size.x / 2 &&
+                                ball.position.x < this.position.x + this.size.x / 2 &&
+                                ball.position.y > this.position.y - this.size.y / 2 - ball.size.y / 2 &&
+                                ball.position.y < this.position.y + this.size.y / 2 + ball.size.y / 2
+                            )
+                        ) {
+                        Sound.PlaySound("death");
+                        score += 1;
+                        if (hs < score) {
+                            hs = score;
+                        }
+                        if (score == 24) {
+                            gameClear();
+                        }
+                        board[i] = board[i].slice(0, j) + " " + board[i].slice(j + 1);
+                        if (ball.position.x > this.position.x - this.size.x / 2 && ball.position.x < this.position.x + this.size.x / 2)
+                            {ball.direction.y *= -1;
+                            ball.direction.x += Math.random();}
+                        else {ball.direction.x *= -1;
+                            ball.direction.y += Math.random();}
+
+                        this.position = new Vector2(-100, -100);
+                        }
+                    },
+                }));
+            }
             }
         }
     }
@@ -119,6 +239,7 @@ function backMenu() {
     receiver = false;
     donts = false;
     killblock();
+    score = 0;
 }
 
 function gameClear() {
