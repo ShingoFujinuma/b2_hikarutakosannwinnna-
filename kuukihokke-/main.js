@@ -69,9 +69,9 @@ function gameStart() {
     barR.position.y = GameArea.y/2;
     // ball.position.x = GameArea.x / 3;
     // ball.position.y = GameArea.y / 2;
-    // ball.direction.x = 0.6;
-    // ball.direction.y = 0.8;
-    // bar.position.x = GameArea.x / 2;
+     ball.direction.x = 0.6;
+     ball.direction.y = 0.8;
+
     IsGameRunning = true;
 }
 
@@ -109,49 +109,48 @@ function lgoal(){
 //     gamedeath.textContent = "CLEAR";
 // }
 
-// //ballsyoukan
-// const ball = new CanvasComponents({
-//   ctx: MainContext,
-//   img: "ball2.png",
-//   position: new Vector2(GameArea.x / 3, GameArea.y / 2),
-//   update: function () {
-//     //every flame
-//     this.rotate += 501
-//     if(IsGameRunning == true){
-//     this.motion = this.direction.normalized().multiply(15);
-//     this.position = this.position.add(this.motion);
-//     if(this.position.x > GameArea.x - this.size.x/2)
-//     {this.direction.x = this.direction.x - this.direction.x * 2
-//     Sound.PlaySound("click")}
-//     if(this.position.x < 0+this.size.x/2)
-//     {this.direction.x = this.direction.x - this.direction.x * 2
-//         Sound.PlaySound("click")}
-//     if(this.position.y < 0+this.size.y/2)
-//     {this.direction.y = this.direction.y - this.direction.y * 2
-//         Sound.PlaySound("click")}
-//     if (
-//         this.position.x > bar.position.x - bar.size.x / 2 &&
-//         this.position.x < bar.position.x + bar.size.x / 2 &&
-//         this.position.y > bar.position.y - bar.size.y / 2 - this.size.y / 2 + 25 &&
-//         this.position.y < bar.position.y + bar.size.y / 2 + this.size.y / 2 - 25
-//     ) {
-//         this.direction.y *= -1;
-//         Sound.PlaySound("click");
-//     } 
-//     else if (
-//         this.position.x > bar.position.x - bar.size.x / 2 - this.size.x / 2 - 25 &&
-//         this.position.x < bar.position.x + bar.size.x / 2 + this.size.x / 2 + 25 &&
-//         this.position.y > bar.position.y - bar.size.y / 2 &&
-//         this.position.y < bar.position.y + bar.size.y / 2
-//     ) {
-//         this.direction.x *= -1;
-//         Sound.PlaySound("click");
-//     }
-//     if(this.position.y > GameArea.y)
-//     {gameOver();}
-//     }
-// }});
-// ball.direction = new Vector2(0.6, 0.8);
+ //ballsyoukan
+ const ball = new CanvasComponents({
+   ctx: MainContext,
+   img: "ball2.png",
+   position: new Vector2(GameArea.x / 3, GameArea.y / 2),
+   update: function  () {
+    // every flame
+     this.rotate += 501
+     if(IsGameRunning == true){
+     this.motion = this.direction.normalized().multiply(15);
+     this.position = this.position.add(this.motion);
+     if(this.position.x > GameArea.x - this.size.x/2)
+     {this.direction.x = this.direction.x - this.direction.x * 2
+     Sound.PlaySound("click")}
+     if(this.position.x < 0 + this.size.x/2)
+     {this.direction.x = this.direction.x - this.direction.x * 2
+         Sound.PlaySound("click")}
+     if(this.position.y < 0 + this.size.y/2)
+     {this.direction.y = this.direction.y * -1 //- this.direction.y * 2
+         Sound.PlaySound("click")}
+     if(this.position.y > GameArea.y - this.size.y/2)
+     {this.direction.y = this.direction.y * -1 //+ this.direction.y * 2 
+         Sound.PlaySound("click")}    
+     if (
+         this.position.x > barR.position.x - barR.size.x / 2 &&
+         this.position.x < barR.position.x + barR.size.x / 2 &&
+         this.position.y > barR.position.y - barR.size.y / 2 - this.size.y / 2 + 25 &&
+         this.position.y < barR.position.y + barR.size.y / 2 + this.size.y / 2 - 25
+     ) {
+         this.direction.x *= -1;
+         Sound.PlaySound("click");
+     } 
+     else if (
+        this.position.x > barL.position.x - barL.size.x / 2 &&
+        this.position.x < barL.position.x + barL.size.x / 2 &&
+        this.position.y > barL.position.y - barL.size.y / 2 - this.size.y / 2 + 25 &&
+        this.position.y < barL.position.y + barL.size.y / 2 + this.size.y / 2 - 25
+    ) {
+        this.direction.x *= -1;
+        Sound.PlaySound("click");
+ }}}});
+ ball.direction = new Vector2(0.6, 0.8);
 
 //ゲームループの定義・開始
 const GameLoop = new GameLoopManager(() => {
@@ -162,9 +161,9 @@ const GameLoop = new GameLoopManager(() => {
         if(keyInput.IsPressed(" ") && IsGameRunning == false && donts == false){
            gameStart()
         }
-        // if(keyInput.IsPressed("r") && IsGameRunning == false && receiver == true){
-        //    backMenu()
-        // }
+         if(keyInput.IsPressed("r") && IsGameRunning == false && receiver == true){
+            backMenu()
+        }
     });
-}, 30);
+}, 47);
 GameLoop.start()
