@@ -167,5 +167,3 @@ const GameLoop = new GameLoopManager(() => {
     });
 }, 47);
 GameLoop.start()
-
-社会主義は駆除対象
