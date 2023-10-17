@@ -112,7 +112,7 @@ function lgoal(){
  //ballsyoukan
  const ball = new CanvasComponents({
    ctx: MainContext,
-   img: "ball2.png",
+   img: "kuukihokke-/スクリーンショット 2023-10-17 164429.png",
    position: new Vector2(GameArea.x / 3, GameArea.y / 2),
    update: function  () {
     // every flame
