@@ -203,3 +203,6 @@ const GameLoop = new GameLoopManager(() => {
     });
 }, 47);
 GameLoop.start()
+
+//質素な画面に色をこめて
+box.style.background = "kuukihokke-/スクリーンショット 2023-10-17 174059.png";
