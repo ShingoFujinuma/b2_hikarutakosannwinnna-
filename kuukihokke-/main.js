@@ -17,6 +17,7 @@ let gamedeath = document.getElementById("gameEnd");
 let block=[];
 let randomiser = Math.random();
 let goaledl = false;
+let background = document.querySelector("body");
 
 //soundloading
 Sound.LoadSound("click", "assets/click.mp3");
@@ -205,14 +206,16 @@ const GameLoop = new GameLoopManager(() => {
 GameLoop.start()
 
 //質素な画面に色をこめて
-box.style.background = "kuukihokke-/スクリーンショット 2023-10-17 174059.png";
+document.body.style.backgroundImage = "/スクリーンショット 2023-10-17 174059.png";
 
 //障害物
 const board = [
     "▪        ▪",
-    "   ▪  ▪   ",
     "          ",
-    "   ▪  ▪   ",
+    "          ",
+    "          ",
+    "          ",
+    "          ",
     "▪        ▪",
 ];
 for (let i = 0; i < board.length; i++) {
@@ -221,8 +224,8 @@ for (let i = 0; i < board.length; i++) {
             new CanvasComponents({
                 ctx: MainContext,
                 img: "assets/bar.png",
-                size: new Vector2(GameArea.x / 10 , 30),
-                position: new Vector2((GameArea.x / 10 / 2) + j * (GameArea.x / 10), 15 + i * 30),
+                size: new Vector2(GameArea.x / 50 , 500),
+                position: new Vector2((GameArea.x / 10 / 2) + j * (GameArea.x / 10), 15 + i * 115),
                 update: function () {
                     if (
                         (
@@ -242,8 +245,7 @@ for (let i = 0; i < board.length; i++) {
                         Sound.PlaySound("hit");
                         board[i] = board[i].slice(0, j) + " " + board[i].slice(j + 1);
                         if (ball.position.x > this.position.x - this.size.x / 2 && ball.position.x < this.position.x + this.size.x / 2) 
-                             ball.direction.y *= -1;
-                        else ball.direction.x *= -1;
+                        
                         
                         this.position = new Vector2(-100, -100);
                     }
