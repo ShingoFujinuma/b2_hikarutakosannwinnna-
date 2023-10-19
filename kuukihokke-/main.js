@@ -11,11 +11,12 @@ let rpoint = 0;
 let dis = document.getElementById("menu");
 dis.innerHTML = "LEGENDARY AIR HOCKEY<br><br><br>PRESS SPACE TO START";
 let IsGameRunning = false;
-let donts = false;
+let goaling = false;
 let receiver = false;
 let gamedeath = document.getElementById("gameEnd");
 let block=[];
 let randomiser = Math.random();
+let goaledl = false;
 
 //soundloading
 Sound.LoadSound("click", "assets/click.mp3");
@@ -54,66 +55,93 @@ const barR = new CanvasComponents({
         this.position.y +=15
         }
         if (keyInput.IsPressed("f")) {
-            Sound.PlaySound("death")
-            lgoal
+            lgoal()
         }
     }
 })
 
 
 function gameStart() {
+    IsGameRunning = true;
+    goaling=false;
     Sound.PlaySound("click");
     document.querySelector("#menu").style.display = "none";
     document.querySelector("#game").style.display = "block";
     barL.position.y = GameArea.y/2;
     barR.position.y = GameArea.y/2;
-    // ball.position.x = GameArea.x / 3;
-    // ball.position.y = GameArea.y / 2;
-     ball.direction.x = 0.6;
-     ball.direction.y = 0.8;
+    if(lpoint==0&&rpoint==0&&randomiser<0.5){
+        ball.position.x=GameArea.x/3
+        ball.direction.x=0.6
+    }
+    if(rpoint>0&&goaledl==false){
+        ball.position.x=GameArea.x/3
+        ball.direction.x=0.6
+    }
+    if(lpoint==0&&rpoint==0&&randomiser>=0.5){
+        ball.position.x=GameArea.x/3*2
+        ball.direction.x=-0.6
+    }
+    if(lpoint>0&&goaledl==true){
+        ball.position.x=GameArea.x/3*2
+        ball.direction.x=-0.6
+    }
+    ball.position.y = GameArea.y / 2;
+    ball.direction.y = 0.8;
 
-    IsGameRunning = true;
 }
 
-function lgoal(){
+function lgoal() {
     lpoint+=1;
-    dis.innerHTML = "G O A L<br>L PLAYER<br><br><br>"+lpoint+" : "+rpoint+"<br><br>PRESS SPACE TO START NEXT";
-    document.querySelector("#gameEnd").style.display="none";
+    document.querySelector("#menu").style.display = "flex";
+    let lg = document.getElementById("menu");
+    if (lpoint<5){
+        lg.innerHTML = "G O A L<br>L PLAYER<br><br><br>"+lpoint+" : "+rpoint+"<br><br>PRESS SPACE TO START NEXT";
+    }
+    if (lpoint>4){
+        lg.innerHTML = "F  I  N  I  S  H<br><br>L PLAYER WON<br><br>"+lpoint+" : "+rpoint+"";
+        Sound.PlaySound("explosion")
+        const bakuhatu = new CanvasComponents({
+            ctx: MainContext,
+            img: "bakuhatu.jpg",
+            size: new Vector2(1280, 853),
+            position: new Vector2(barR.position.x, barR.position.y)
+        })
+    }
+    Sound.PlaySound("death");
+    goaling=true;
+    IsGameRunning=false;
+    goaledl=true;
 }
 
-// function gameOver() {
-//     gamedeath.innerHTML = "GAME OVER<br><br>SCORE: "+score+"<br>HIGHSCORE: "+hs+"<br><br>PRESS R TO RESTART";
-//     donts = true;
-//     receiver = true;
-//     document.querySelector("#gameEnd").style.display = "block";
-//     IsGameRunning = false;
-//     Sound.PlaySound("explosion");
-// }
+function rgoal() {
+    rpoint+=1;
+    document.querySelector("#menu").style.display = "flex";
+    let rg = document.getElementById("menu");
+    if (rpoint<5){
+        rg.innerHTML = "G O A L<br>R PLAYER<br><br><br>"+lpoint+" : "+rpoint+"<br><br>PRESS SPACE TO START NEXT";
+    }
+    if (rpoint>4){
+        rg.innerHTML = "F  I  N  I  S  H<br><br>R PLAYER WON<br><br>"+lpoint+" : "+rpoint+"";
+        Sound.PlaySound("explosion")
+        const bakuhatu = new CanvasComponents({
+            ctx: MainContext,
+            img: "bakuhatu.jpg",
+            size: new Vector2(1280, 853),
+            position: new Vector2(barL.position.x, barL.position.y)
+        })
+    }
+    Sound.PlaySound("death");
+    goaling=true;
+    IsGameRunning=false;
+    goaledl=false;
+}
 
-// function backMenu() {
-//     Sound.PlaySound("click");
-//     document.querySelector("#menu").style.display = "block";
-//     document.querySelector("#game").style.display = "none";
-//     document.querySelector("#gameEnd").style.display = "none";
-//     receiver = false;
-//     donts = false;
-//     killblock();
-//     score = 0;
-// }
-
-// function gameClear() {
-//     Sound.PlaySound("clear");
-//     IsGameRunning = false;
-//     donts = true;
-//     document.querySelector("#gameEnd").style.display = "block";
-//     gamedeath.textContent = "CLEAR";
-// }
 
  //ballsyoukan
  const ball = new CanvasComponents({
    ctx: MainContext,
-   img: "kuukihokke-/スクリーンショット 2023-10-17 164429.png",
-   position: new Vector2(GameArea.x / 3, GameArea.y / 2),
+   img: "ball2.png",
+   position: new Vector2(GameArea.x / 2, GameArea.y / 2),
    update: function  () {
     // every flame
      this.rotate += 501
@@ -127,10 +155,10 @@ function lgoal(){
      {this.direction.x = this.direction.x - this.direction.x * 2
          Sound.PlaySound("click")}
      if(this.position.y < 0 + this.size.y/2)
-     {this.direction.y = this.direction.y * -1 //- this.direction.y * 2
+     {this.direction.y = this.direction.y * -1
          Sound.PlaySound("click")}
      if(this.position.y > GameArea.y - this.size.y/2)
-     {this.direction.y = this.direction.y * -1 //+ this.direction.y * 2 
+     {this.direction.y = this.direction.y * -1 
          Sound.PlaySound("click")}    
      if (
          this.position.x > barR.position.x - barR.size.x / 2 &&
@@ -139,7 +167,9 @@ function lgoal(){
          this.position.y < barR.position.y + barR.size.y / 2 + this.size.y / 2 - 25
      ) {
          this.direction.x *= -1;
+         this.position.x -= 5;
          Sound.PlaySound("click");
+         this.direction.y+=Math.random()-0.5*0.1;
      } 
      else if (
         this.position.x > barL.position.x - barL.size.x / 2 &&
@@ -148,8 +178,17 @@ function lgoal(){
         this.position.y < barL.position.y + barL.size.y / 2 + this.size.y / 2 - 25
     ) {
         this.direction.x *= -1;
+        this.position.x+=5;
         Sound.PlaySound("click");
- }}}});
+        this.direction.y+=Math.random()-0.5*0.1;
+ }
+if (this.position.x>GameArea.x/10*9+100&&IsGameRunning==true){
+    lgoal()
+}
+if (this.position.x<GameArea.x/10-100&&IsGameRunning==true){
+    rgoal()
+}
+}}});
  ball.direction = new Vector2(0.6, 0.8);
 
 //ゲームループの定義・開始
@@ -158,11 +197,8 @@ const GameLoop = new GameLoopManager(() => {
     CanvasComponents.components.forEach((component) => {
         component.update();
         component.render();
-        if(keyInput.IsPressed(" ") && IsGameRunning == false && donts == false){
+        if(keyInput.IsPressed(" ") && IsGameRunning == false){
            gameStart()
-        }
-         if(keyInput.IsPressed("r") && IsGameRunning == false && receiver == true){
-            backMenu()
         }
     });
 }, 47);
