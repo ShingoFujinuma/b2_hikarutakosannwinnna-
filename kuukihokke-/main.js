@@ -18,6 +18,7 @@ let block=[];
 let randomiser = Math.random();
 let goaledl = false;
 let background = document.querySelector("body");
+let finished=false;
 
 //soundloading
 Sound.LoadSound("click", "assets/click.mp3");
@@ -101,6 +102,7 @@ function lgoal() {
     if (lpoint>4){
         lg.innerHTML = "F  I  N  I  S  H<br><br>L PLAYER WON<br><br>"+lpoint+" : "+rpoint+"";
         Sound.PlaySound("explosion")
+        finished=true;
         const bakuhatu = new CanvasComponents({
             ctx: MainContext,
             img: "bakuhatu.jpg",
@@ -124,6 +126,7 @@ function rgoal() {
     if (rpoint>4){
         rg.innerHTML = "F  I  N  I  S  H<br><br>R PLAYER WON<br><br>"+lpoint+" : "+rpoint+"";
         Sound.PlaySound("explosion")
+        finished=true;
         const bakuhatu = new CanvasComponents({
             ctx: MainContext,
             img: "bakuhatu.jpg",
@@ -198,7 +201,7 @@ const GameLoop = new GameLoopManager(() => {
     CanvasComponents.components.forEach((component) => {
         component.update();
         component.render();
-        if(keyInput.IsPressed(" ") && IsGameRunning == false){
+        if(keyInput.IsPressed(" ") && IsGameRunning == false&&finished==false){
            gameStart()
         }
     });
@@ -225,31 +228,31 @@ for (let i = 0; i < board.length; i++) {
                 ctx: MainContext,
                 img: "assets/bar.png",
                 size: new Vector2(GameArea.x / 50 , 500),
-                position: new Vector2((GameArea.x / 10 / 2) + j * (GameArea.x / 10), 15 + i * 115),
-                update: function () {
-                    if (
-                        (
-                            //横長の判定
-                            ball.position.x > this.position.x - this.size.x / 2 - ball.size.x / 2 &&
-                            ball.position.x < this.position.x + this.size.x / 2 + ball.size.x / 2 &&
-                            ball.position.y > this.position.y - this.size.y / 2 &&
-                            ball.position.y < this.position.y + this.size.y / 2
-                        ) || ( 
-                            //縦長の判定
-                            ball.position.x > this.position.x - this.size.x / 2 &&
-                            ball.position.x < this.position.x + this.size.x / 2 &&
-                            ball.position.y > this.position.y - this.size.y / 2 - ball.size.y / 2 &&
-                            ball.position.y < this.position.y + this.size.y / 2 + ball.size.y / 2
-                        )
-                    ) {
-                        Sound.PlaySound("hit");
-                        board[i] = board[i].slice(0, j) + " " + board[i].slice(j + 1);
-                        if (ball.position.x > this.position.x - this.size.x / 2 && ball.position.x < this.position.x + this.size.x / 2) 
+                position: new Vector2((GameArea.x / 10 / 2) + j * (GameArea.x / 10), 15 + i * 115)//,
+                // update: function () {
+                //     if (
+                //         (
+                //             //横長の判定
+                //             ball.position.x > this.position.x - this.size.x / 2 - ball.size.x / 2 &&
+                //             ball.position.x < this.position.x + this.size.x / 2 + ball.size.x / 2 &&
+                //             ball.position.y > this.position.y - this.size.y / 2 &&
+                //             ball.position.y < this.position.y + this.size.y / 2
+                //         ) || ( 
+                //             //縦長の判定
+                //             ball.position.x > this.position.x - this.size.x / 2 &&
+                //             ball.position.x < this.position.x + this.size.x / 2 &&
+                //             ball.position.y > this.position.y - this.size.y / 2 - ball.size.y / 2 &&
+                //             ball.position.y < this.position.y + this.size.y / 2 + ball.size.y / 2
+                //         )
+                //     ) {
+                //         Sound.PlaySound("hit");
+                //         board[i] = board[i].slice(0, j) + " " + board[i].slice(j + 1);
+                //         if (ball.position.x > this.position.x - this.size.x / 2 && ball.position.x < this.position.x + this.size.x / 2) 
                         
                         
-                        this.position = new Vector2(-100, -100);
-                    }
-                },
+                //         this.position = new Vector2(-100, -100);
+                //     }
+                // },
             });
         }
     }
