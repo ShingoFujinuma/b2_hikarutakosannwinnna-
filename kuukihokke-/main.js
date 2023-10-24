@@ -31,14 +31,14 @@ Sound.LoadSound("clear", "決定ボタンを押す20.mp3")
 const barL = new CanvasComponents({
     ctx: MainContext,
     img: "barL.png",
-    size: new Vector2(17, 134),
-    position: new Vector2(GameArea.x / 10, GameArea.y /2),
+    size: new Vector2(25, 134),
+    position: new Vector2(GameArea.x / 7.5, GameArea.y /2),
     update: function () {
         if (keyInput.IsPressed("w") && this.position.y > 0 + this.size.y / 2 && IsGameRunning == true) {
-             this.position.y -=15
+             this.position.y -=11
         }     
        if (keyInput.IsPressed("s") && this.position.y < 720 - this.size.y / 2 && IsGameRunning == true) {
-        this.position.y +=15
+        this.position.y +=11
         }
     }
 })
@@ -47,21 +47,20 @@ const barL = new CanvasComponents({
 const barR = new CanvasComponents({
     ctx: MainContext,
     img: "barR.png",
-    size: new Vector2(17, 134),
-    position: new Vector2(GameArea.x / 10*9, GameArea.y /2),
+    size: new Vector2(25, 134),
+    position: new Vector2(GameArea.x / 15*13, GameArea.y /2),
     update: function () {
         if (keyInput.IsPressed("ArrowUp") && this.position.y > 0 + this.size.y / 2 && IsGameRunning == true) {
-             this.position.y -=15
+             this.position.y -=11
         }     
        if (keyInput.IsPressed("ArrowDown") && this.position.y < 720 - this.size.y / 2 && IsGameRunning == true) {
-        this.position.y +=15
+        this.position.y +=11
         }
         if (keyInput.IsPressed("f")) {
             lgoal()
         }
     }
 })
-
 
 function gameStart() {
     IsGameRunning = true;
@@ -140,7 +139,6 @@ function rgoal() {
     goaledl=false;
 }
 
-
  //ballsyoukan
  const ball = new CanvasComponents({
    ctx: MainContext,
@@ -150,7 +148,7 @@ function rgoal() {
     // every flame
      this.rotate += 501
      if(IsGameRunning == true){
-     this.motion = this.direction.normalized().multiply(15);
+     this.motion = this.direction.normalized().multiply(16);
      this.position = this.position.add(this.motion);
      if(this.position.x > GameArea.x - this.size.x/2)
      {this.direction.x = this.direction.x - this.direction.x * 2
@@ -164,34 +162,118 @@ function rgoal() {
      if(this.position.y > GameArea.y - this.size.y/2)
      {this.direction.y = this.direction.y * -1 
          Sound.PlaySound("click")}    
-     if (
-         this.position.x > barR.position.x - barR.size.x / 2 &&
-         this.position.x < barR.position.x + barR.size.x / 2 &&
-         this.position.y > barR.position.y - barR.size.y / 2 - this.size.y / 2 + 25 &&
-         this.position.y < barR.position.y + barR.size.y / 2 + this.size.y / 2 - 25
+     if (//r表
+         this.position.x > barR.position.x - barR.size.x / 2 - this.size.x / 2 &&
+         this.position.x < barR.position.x + barR.size.x / 2 + this.size.x / 2 &&
+         this.position.y > barR.position.y - barR.size.y / 2 &&
+         this.position.y < barR.position.y + barR.size.y / 2
      ) {
          this.direction.x *= -1;
          this.position.x -= 5;
          Sound.PlaySound("click");
          this.direction.y+=Math.random()-0.5*0.1;
-     } 
-     else if (
-        this.position.x > barL.position.x - barL.size.x / 2 &&
-        this.position.x < barL.position.x + barL.size.x / 2 &&
-        this.position.y > barL.position.y - barL.size.y / 2 - this.size.y / 2 + 25 &&
-        this.position.y < barL.position.y + barL.size.y / 2 + this.size.y / 2 - 25
-    ) {
+     }
+     if(//r裏
+         this.position.x < barR.position.x + barR.size.x / 2 + this.size.x / 2 &&
+         this.position.x > barR.position.x - barR.size.x / 2 - this.size.x / 2 &&
+         this.position.y > barR.position.y + barR.size.y / 2 &&
+         this.position.y < barR.position.y - barR.size.y / 2
+     ){
+         this.direction.x *= -1;
+         this.position.x += 5;
+         Sound.PlaySound("click");
+         this.direction.y+=Math.random()-0.5*0.1;
+     }
+     if(//r上
+        this.position.y < barR.position.y + barR.size.y / 2 + this.size.y / 2 &&
+        this.position.y > barR.position.y - barR.size.y / 2 - this.size.y / 2 &&
+        this.position.x > barR.position.x - barR.size.x / 2 &&
+        this.position.x < barR.position.x + barR.size.x / 2
+     ){
+        this.direction.y *= -1;
+        this.position.y -= 12;
+        Sound.PlaySound("click");
+        if(this.direction.x>0){
+            this.position.x += 15
+        }else{
+            this.position.x -= 15
+        }
+     }
+     if(//r下
+        this.position.y > barR.position.y - barR.size.y / 2 - this.size.y / 2 &&
+        this.position.y < barR.position.y + barR.size.y / 2 + this.size.y / 2 &&
+        this.position.x > barR.position.x - barR.size.x / 2 &&
+        this.position.x < barR.position.x + barR.size.x / 2
+     ){
+        this.direction.y *= -1;
+        this.position.y += 12;
+        Sound.PlaySound("click");
+        if(this.direction.x>0){
+            this.position.x += 15
+        }else{
+            this.position.x -= 15
+        }
+     }
+     if(//l表
+        this.position.x < barL.position.x + barL.size.x / 2 + this.size.x / 2 - 25 &&
+        this.position.x > barL.position.x - barL.size.x / 2 - this.size.x / 2 + 25 &&
+        this.position.y < barL.position.y + barL.size.y / 2 &&
+        this.position.y > barL.position.y - barL.size.y / 2
+     ) {
         this.direction.x *= -1;
         this.position.x+=5;
         Sound.PlaySound("click");
         this.direction.y+=Math.random()-0.5*0.1;
+     }
+     if (//l裏
+        this.position.x > barL.position.x - barL.size.x / 2 - this.size.x / 2 + 25 &&
+        this.position.x < barL.position.x + barL.size.x / 2 + this.size.x / 2 - 25 &&
+        this.position.y < barL.position.y - barL.size.y / 2 &&
+        this.position.y > barL.position.y + barL.size.y / 2
+    ) {
+        this.direction.x *= -1;
+        this.position.x-=5;
+        Sound.PlaySound("click");
+        this.direction.y+=Math.random()-0.5*0.1;
  }
-if (this.position.x>GameArea.x/10*9+100&&IsGameRunning==true){
+    if(//l上
+        this.position.y < barL.position.y + barL.size.y / 2 + this.size.y / 2 &&
+        this.position.y > barL.position.y - barL.size.y / 2 - this.size.y / 2 &&
+        this.position.x > barL.position.x - barL.size.x / 2 &&
+        this.position.x < barL.position.x + barL.size.x / 2
+     ){
+        this.direction.y *= -1;
+        this.position.y -= 12;
+        Sound.PlaySound("click");
+        if(this.direction.x>0){
+            this.position.x += 15
+        }else{
+            this.position.x -= 15
+        }
+     }
+     if(//l下
+        this.position.y > barL.position.y - barL.size.y / 2 - this.size.y / 2 &&
+        this.position.y < barL.position.y + barL.size.y / 2 + this.size.y / 2 &&
+        this.position.x > barL.position.x - barL.size.x / 2 &&
+        this.position.x < barL.position.x + barL.size.x / 2
+     ){
+        this.direction.y *= -1;
+        this.position.y += 12;
+        Sound.PlaySound("click");
+        if(this.direction.x>0){
+            this.position.x += 15
+        }else{
+            this.position.x -= 15
+        }
+     }
+if (this.position.x>GameArea.x/9*8+100&&IsGameRunning==true){
     lgoal()
 }
-if (this.position.x<GameArea.x/10-100&&IsGameRunning==true){
+if (this.position.x<GameArea.x/9-100&&IsGameRunning==true){
     rgoal()
 }
+if(this.position.x>GameArea.x){this.direction.x=this.direction.x*-1}
+if(this.position.x<0){this.direction.x=this.direction.x*-1}
 }}});
  ball.direction = new Vector2(0.6, 0.8);
 
@@ -205,7 +287,7 @@ const GameLoop = new GameLoopManager(() => {
            gameStart()
         }
     });
-}, 47);
+}, 57);
 GameLoop.start()
 
 //質素な画面に色をこめて
@@ -227,33 +309,50 @@ for (let i = 0; i < board.length; i++) {
             new CanvasComponents({
                 ctx: MainContext,
                 img: "assets/bar.png",
-                size: new Vector2(GameArea.x / 50 , 500),
-                position: new Vector2((GameArea.x / 10 / 2) + j * (GameArea.x / 10), 15 + i * 115)//,
-                // update: function () {
-                //     if (
-                //         (
-                //             //横長の判定
-                //             ball.position.x > this.position.x - this.size.x / 2 - ball.size.x / 2 &&
-                //             ball.position.x < this.position.x + this.size.x / 2 + ball.size.x / 2 &&
-                //             ball.position.y > this.position.y - this.size.y / 2 &&
-                //             ball.position.y < this.position.y + this.size.y / 2
-                //         ) || ( 
-                //             //縦長の判定
-                //             ball.position.x > this.position.x - this.size.x / 2 &&
-                //             ball.position.x < this.position.x + this.size.x / 2 &&
-                //             ball.position.y > this.position.y - this.size.y / 2 - ball.size.y / 2 &&
-                //             ball.position.y < this.position.y + this.size.y / 2 + ball.size.y / 2
-                //         )
-                //     ) {
-                //         Sound.PlaySound("hit");
-                //         board[i] = board[i].slice(0, j) + " " + board[i].slice(j + 1);
-                //         if (ball.position.x > this.position.x - this.size.x / 2 && ball.position.x < this.position.x + this.size.x / 2) 
-                        
-                        
-                //         this.position = new Vector2(-100, -100);
-                //     }
-                // },
-            });
+                size: new Vector2(GameArea.x / 50 , 350),
+                position: new Vector2((GameArea.x / 10 / 2) + j * (GameArea.x / 10), 15 + i * 115),
+                update: function () {
+                    if (
+                        //白い壁の側面
+                        ball.position.x > this.position.x - this.size.x / 2 - ball.size.x / 2 &&
+                        ball.position.x < this.position.x + this.size.x / 2 + ball.size.x / 2 &&
+                        ball.position.y > this.position.y - this.size.y / 2 &&
+                        ball.position.y < this.position.y + this.size.y / 2
+                    ){
+                        Sound.PlaySound("click");
+                        ball.direction.x=ball.direction.x*-1+Math.random()-0.5*-0.05;
+                        if(
+                            ball.position.x>GameArea.x/2
+                        ){
+                            ball.position.x-=7
+                        }else{
+                            ball.position.x+=7
+                        }
+                    }
+                    if(//隙間の内側(下側)
+                        ball.position.y < this.position.y + this.size.y / 2 + ball.size.y / 2 &&
+                        ball.position.y > this.position.y - this.size.y / 2 - ball.size.y / 2 &&
+                        ball.position.x > this.position.x - this.size.x / 2 &&
+                        ball.position.x < this.position.x + this.size.x / 2
+                    ){
+                        Sound.PlaySound("click");
+                        ball.direction.y=ball.direction.y*-1+Math.random()-0.5*-0.05;
+                        ball.position.y>GameArea.y/2
+                        ball.position.y+=15
+                    }
+                    if(//隙間の内側(上側)
+                        ball.position.y > this.position.y - this.size.y / 2 - ball.size.y / 2 &&
+                        ball.position.y < this.position.y + this.size.y / 2 + ball.size.y / 2 &&
+                        ball.position.x > this.position.x - this.size.x / 2 &&
+                        ball.position.x < this.position.x + this.size.x / 2
+                    ){
+                        Sound.PlaySound("click");
+                        ball.direction.y=ball.direction.y*-1+Math.random()-0.5*-0.05;
+                        ball.position.y>GameArea.y/2
+                        ball.position.y-=15
+                    }
+                    }
+                },
+            )};
         }
     }
-}
