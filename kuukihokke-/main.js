@@ -21,8 +21,9 @@ let background = document.querySelector("body");
 let finished=false;
 
 //soundloading
-Sound.LoadSound("click", "assets/click.mp3");
-Sound.LoadSound("hit", "assets/hit.mp3");
+Sound.LoadSound("start", "assets/click.mp3");
+Sound.LoadSound("click","assets/決定ボタンを押す7.mp3")
+// Sound.LoadSound("hit", "assets/hit.mp3");
 Sound.LoadSound("explosion", "explosion.mp3")
 Sound.LoadSound("death", "キャンセル5.mp3")
 Sound.LoadSound("clear", "決定ボタンを押す20.mp3")
@@ -56,16 +57,13 @@ const barR = new CanvasComponents({
        if (keyInput.IsPressed("ArrowDown") && this.position.y < 720 - this.size.y / 2 && IsGameRunning == true) {
         this.position.y +=11
         }
-        if (keyInput.IsPressed("f")) {
-            lgoal()
-        }
     }
 })
 
 function gameStart() {
     IsGameRunning = true;
     goaling=false;
-    Sound.PlaySound("click");
+    Sound.PlaySound("start");
     document.querySelector("#menu").style.display = "none";
     document.querySelector("#game").style.display = "block";
     barL.position.y = GameArea.y/2;
@@ -266,6 +264,25 @@ function rgoal() {
             this.position.x -= 15
         }
      }
+     if(this.direction.x>this.direction.y){
+        if(this.direction.x-this.direction.y>2.5){
+            if(this.direction.x>0){this.direction.x=0.8}
+            else{this.direction.x=-0.8};
+            if(this.direction.y>0){this.direction.y=0.6}
+            else{this.direction.y=-0.6}
+            // Sound.PlaySound("death");
+        }
+     }else{
+        if(this.direction.y-this.direction.x>2.5){
+            if(this.direction.x>0){this.direction.x=0.6}
+            else{this.direction.x=-0.6};
+            if(this.direction.y>0){this.direction.y=0.8}
+            else{this.direction.y=-0.8}
+            // Sound.PlaySound("death");
+        }
+     }
+     if(this.position.y<5){this.position.y=20;Sound.PlaySound("death")}
+     if(this.position.y>GameArea.y-5){this.position.y=GameArea.y-20;Sound.PlaySound("death")}
 if (this.position.x>GameArea.x/9*8+100&&IsGameRunning==true){
     lgoal()
 }
@@ -309,7 +326,7 @@ for (let i = 0; i < board.length; i++) {
             new CanvasComponents({
                 ctx: MainContext,
                 img: "assets/bar.png",
-                size: new Vector2(GameArea.x / 50 , 350),
+                size: new Vector2(GameArea.x / 50 , 250),
                 position: new Vector2((GameArea.x / 10 / 2) + j * (GameArea.x / 10), 15 + i * 115),
                 update: function () {
                     if (
