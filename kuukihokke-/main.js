@@ -104,7 +104,7 @@ function lgoal() {
             ctx: MainContext,
             img: "bakuhatu.jpg",
             size: new Vector2(1280, 853),
-            position: new Vector2(barR.position.x, barR.position.y)
+            position: new Vector2(barR.position.x, ball.position.y)
         })
     }
     Sound.PlaySound("death");
@@ -128,7 +128,7 @@ function rgoal() {
             ctx: MainContext,
             img: "bakuhatu.jpg",
             size: new Vector2(1280, 853),
-            position: new Vector2(barL.position.x, barL.position.y)
+            position: new Vector2(barL.position.x, ball.position.y)
         })
     }
     Sound.PlaySound("death");
