@@ -51,10 +51,10 @@ const barR = new CanvasComponents({
     size: new Vector2(25, 134),
     position: new Vector2(GameArea.x / 15*13, GameArea.y /2),
     update: function () {
-        if (keyInput.IsPressed("ArrowUp") && this.position.y > 0 + this.size.y / 2 && IsGameRunning == true) {
+        if (keyInput.IsPressed("o") && this.position.y > 0 + this.size.y / 2 && IsGameRunning == true) {
              this.position.y -=11
         }     
-       if (keyInput.IsPressed("ArrowDown") && this.position.y < 720 - this.size.y / 2 && IsGameRunning == true) {
+       if (keyInput.IsPressed("l") && this.position.y < 720 - this.size.y / 2 && IsGameRunning == true) {
         this.position.y +=11
         }
     }
@@ -370,7 +370,7 @@ for (let i = 0; i < board.length; i++) {
                     }
                     }
                 },
-            )};
+            )}; 
         }
     }
 
